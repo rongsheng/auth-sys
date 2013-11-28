@@ -66,7 +66,7 @@ class FL_Form_validation {
         if (function_exists('mb_internal_encoding'))
         {
             // MODIFICATION
-            mb_internal_encoding(GafConfig::get()->charset);
+            mb_internal_encoding('UTF-8');
         }
     /* // MODIFICATION
         log_message('debug', "Form Validation Class Initialized");

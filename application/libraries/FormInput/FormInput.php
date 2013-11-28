@@ -25,6 +25,18 @@ class ValidationException extends InvalidArgumentException {
     }
 }
 
+// Translate UNICODE chars to their approximate latin1 character
+function convert_from_unicode($val) {
+    // if $val is not string, the following function will output a warning. Jun is handling it.
+    $trans = iconv("utf-8", "latin1//TRANSLIT", $val);
+    // If that didn't work because it wasn't UTF-8 and got truncated on an unrecognised character
+    if (mb_strlen($trans) < mb_strlen($val, 'utf-8')) {
+        // Just remove all unrecognised characters
+        $trans = iconv("UTF-8", "latin1//IGNORE", $val);
+    }
+    return iconv("latin1", "UTF-8", $trans);
+}
+
 class FormInput {
     public static $error_msgs = array(
         "required" => "The %s field is required.",
