@@ -15,11 +15,12 @@ define(['jquery',
             'click .pagination .last': 'last'
         },
 
-        initialize: function(options) {
-            this.url = options.url;
+        setBaseUrl: function(url) {
+            this.url = url;
         },
-
+        
         navigate: function(e) {
+            e.preventDefault();
             var page = $(e.currentTarget).text();
             Backbone.history.navigate(this.url + page, true);
         },

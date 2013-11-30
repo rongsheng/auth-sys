@@ -16,7 +16,7 @@ define(['jquery',
         routes: {
             ':type/:keyword/:page': 'search',
             ':page': 'goto_page',
-            '*action': 'default',
+            '*action': 'default'
         },
 
         search: function(type, keyword, page) {
@@ -24,7 +24,9 @@ define(['jquery',
         },
 
         goto_page: function(page) {
-            elView.render(page - 1);
+            if (!isNaN(page) && page > 0) {
+                elView.render(page - 1);
+            }
         },
 
         default: function() {

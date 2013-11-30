@@ -12,6 +12,7 @@ define(['jquery',
         start: 0,
         size: 15,
         searchColumn: null,
+        tmpColumn: null,
         events: {
             'click .filter-column': 'setSearchColumn',
             'keyup #search-input' : 'search'
@@ -37,12 +38,16 @@ define(['jquery',
 
         setSearchColumn: function(e) {
             var $target = $(e.currentTarget);
-            this.searchColumn = $target.data('column');
+            /* save the temporary column to tmpColumn, the searchColumn is set
+               until user hit enter for search */
+            this.tmpColumn = $target.data('column');
             $(this.el).find('#search-label').text($target.text());
         },
 
         search: function(e) {
             if(e.which == 13) {
+                //formly set the searchColumn here
+                this.searchColumn = this.tmpColumn;
                 this.keyword = $(e.currentTarget).val();
                 Backbone.history.navigate(
                     this.getUrlBase(this.searchColumn, this.keyword) + (this.start + 1),
@@ -63,11 +68,16 @@ define(['jquery',
                 start = start - (end - totalPage) >= 0 ? start - (end - totalPage) : 0;
                 end = totalPage;
             }
+            if (this.pView) {
+                this.pView.remove();
+            }
+            
+            if (!this.epView) {
+               this.epView = new EmployeePaginationView(); 
+            }
 
-            var epView = new EmployeePaginationView({
-                'url': this.getUrlBase(this.searchColumn, this.keyword)
-            });
-            epView.render(start, end, index, totalPage);
+            this.epView.setBaseUrl(this.getUrlBase(this.searchColumn, this.keyword));
+            this.epView.render(start, end, index, totalPage);
         },
 
         refresh: function(start, total, size) {
