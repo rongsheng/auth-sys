@@ -41,6 +41,8 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
+/* API route rules */
+$route['api/(:any)'] = "ajax/$1";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
