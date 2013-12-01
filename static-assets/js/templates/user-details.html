@@ -1,44 +1,48 @@
-<div class="col-sm-10 col-md-10 col-md-offset-1">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">User information</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <img class="img-circle" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" alt="User Pic">
-                </div>
-                <div class="col-md-6">
-                    <strong>Cyruxx</strong><br>
-                    <table class="table table-condensed table-responsive table-user-information">
-                        <tbody>
-                        <tr>
-                            <td>User level:</td>
-                            <td>Administrator</td>
-                        </tr>
-                        <tr>
-                            <td>Registered since:</td>
-                            <td>11/12/2013</td>
-                        </tr>
-                        <tr>
-                            <td>Topics</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>Warnings</td>
-                            <td>0</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="panel-footer">
-            <button class="btn btn-sm btn-primary" type="button" data-toggle="tooltip" data-original-title="Send message to user"><i class="glyphicon glyphicon-envelope"></i></button>
-            <span class="pull-right">
-                <button class="btn btn-sm btn-warning" type="button" data-toggle="tooltip" data-original-title="Edit this user"><i class="glyphicon glyphicon-edit"></i></button>
-                <button class="btn btn-sm btn-danger" type="button" data-toggle="tooltip" data-original-title="Remove this user"><i class="glyphicon glyphicon-remove"></i></button>
-            </span>
-        </div>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+      <h4 class="modal-title" id="model-title">User Details</h4>
     </div>
+    <div id="model-body" class="modal-body">
+      <div class="row">
+        <div class="col-md-3 image-wrapper">
+          <img class="img-circle" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=100" alt="User Pic">
+        </div>
+        <div class="col-md-9">
+            <h3><strong><%- data.first_name %> <%- data.last_name %></strong></h3>
+            <table class="table table-condensed table-responsive table-user-information">
+                <tbody>
+                <tr>
+                    <td>Current Role:</td>
+                    <td><strong><%- data.title %></strong> in <%- data.dept_name %> Department</td>
+                </tr>
+                <tr>
+                    <td>Service Period:</td>
+                    <td>
+                      <div><%- data.hire_date %> - <%- data.to_date %></div>
+                      <div>Around <%- Math.floor(data.emp_year) %> year(s)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Birth:</td>
+                    <td><%- data.birth_date %> (Age: <%- data.age %>)</td>
+                </tr>
+                <tr>
+                    <td>Gender:</td>
+                    <td><%- data.gender %></td>
+                </tr>
+                <tr>
+                    <td>Salary:</td>
+                    <td>$<%- data.salary %> / yr</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span> OK</button>
+    </div>
+  </div>
 </div>

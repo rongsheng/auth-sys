@@ -7,10 +7,64 @@ class Employee extends CI_Controller {
         parent::__construct();
     }
 
-    public function getSubordinate() {
+    public function getDetails() {
+        session_start();
         if ($this->libauth->hasLoggedIn()) {
-            session_start();
+            //check if this user is a manager of a department
+            $isManager = $this->session->userdata('isManager');
+            //get current user's department
+            $departNo = $this->session->userdata('deptNo');
 
+            if ($isManager) {
+                //this user is manager, he has permission to read
+                //user's details under his department
+                try {
+                    $input = FormInput::getGetInput(
+                        array(
+                            array("field" => "id",
+                                "label" => "Employee Number",
+                                "rules" => "trim|is_numeric")
+                        )
+                    );
+                } catch (ValidationException $e) {
+                    $this->json->returnJSON(array(
+                        'status' => 'failed',
+                        'reason' => 'Invalid parameters.'
+                    ));
+                    return false;
+                }
+                //get the user's details. $departNo is used to check if this manager
+                //has permission to view employees under another department
+                $userId = intval($input['id']);
+                $result = $this->Employee_model->getDetails($userId, $departNo);
+
+            } else {
+                //this user does not have permission to read others' details,
+                //always return his details.
+                $userId = $this->libauth->getUserId();
+                $result = $this->Employee_model->getDetails($userId, $departNo);
+            }
+            if ($result) {
+                $this->json->returnJSON(array(
+                    'status' => 'success',
+                    'data' => $result
+                ));
+                return true;
+            } else {
+                $this->json->returnJSON(array(
+                    'status' => 'failed',
+                    'reason' => 'No data available'
+                ));
+                return false;
+            }
+        } else {
+            var_dump('NOT LOGGED IN.!!');
+        }
+    }
+
+    public function getSubordinate() {
+        session_start();
+        if ($this->libauth->hasLoggedIn()) {
             try {
                 $input = FormInput::getGetInput(
                     array(

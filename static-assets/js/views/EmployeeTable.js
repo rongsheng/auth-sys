@@ -3,10 +3,11 @@ define(['jquery',
     'backbone',
     'collections/EmployeeCollection',
     'views/EmployeePanel',
+    'views/EmployeeItem',
     'text!templates/employee-table.html',
     ],
   function ($, _, Backbone, EmployeeCollection,
-    EmployeePanelView, EmployeeTableTemplate) {
+    EmployeePanelView, EmployeeItemView, EmployeeTableTemplate) {
     'use strict'
     var EmployeeTableView = Backbone.View.extend({
         compileTable: _.template(EmployeeTableTemplate),
@@ -14,6 +15,7 @@ define(['jquery',
         start: 0,
         size: 15,
         initialized: false,
+        epView: null,
 
         initialize: function() {
             _.bindAll(this, 'fetchSuccess', 'fetchFailed', 'fetch', 'render');
@@ -51,7 +53,6 @@ define(['jquery',
         },
 
         renderPanel: function() {
-
             this.epView = new EmployeePanelView({
                 el: '#control-panel',
                 allevents: this.allevents,
@@ -62,9 +63,21 @@ define(['jquery',
         },
 
         renderTableContent: function() {
-            $(this.el).find('#employee-table').html(this.compileTable({
-                employees: this.collection
-            }));
+            //render table header
+            var $table = $(this.el).find('#employee-table');
+            $table.html(this.compileTable());
+
+            //clear content
+            $table.find('#table-body').html('');
+            //render table rows
+            _.each(this.collection.models, function(employee) {
+
+                console.log(employee);
+                var eiView = new EmployeeItemView({
+                    root: '#table-body'
+                });
+                eiView.render(employee);
+            });
         },
 
         render: function(id, type, keyword) {

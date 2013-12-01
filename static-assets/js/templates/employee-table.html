@@ -9,16 +9,6 @@
       <th>Department</th>
     </tr>
   </thead>
-  <tbody>
-    <% _.each(employees.models, function(e) { %>
-      <tr>
-        <td><%- e.get('first_name') %></td>
-        <td><%- e.get('last_name') %></td>
-        <td><%- e.get('gender') %></td>
-        <td><%- e.get('title') %></td>
-        <td><%- e.get('hire_date') %></td>
-        <td><%- e.get('dept_name') %></td>
-      </tr>
-    <% }); %>
+  <tbody id="table-body">
   </tbody>
 </table>

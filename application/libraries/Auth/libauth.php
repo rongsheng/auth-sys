@@ -18,6 +18,8 @@ class LibAuth {
                 $this->CI->session->set_userdata('lastName', $user->last_name);
                 $this->CI->session->set_userdata('userId', $user->emp_no);
                 $this->CI->session->set_userdata('isManager', $user->is_manager);
+                $this->CI->session->set_userdata('deptNo', $user->dept_no);
+                $this->CI->session->set_userdata('deptName', $user->dept_name);
                 return true;
             } else {
                 return false;

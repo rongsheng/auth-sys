@@ -38,7 +38,7 @@ class Employee_model extends CI_Model {
                 WHERE dm.emp_no = ?
                 GROUP BY e.emp_no
                 ORDER BY e.emp_no;";
-        $result = $this->db->query($sql, array($managerId));
+        $result = $this->db->query($sql, array($id));
 
         $query = $this->db->get_where('employees', array('emp_no' => $id));
         return $query->result();
@@ -62,10 +62,12 @@ class Employee_model extends CI_Model {
             throw new InvalidArgumentException();
         }
         $sql = "SELECT e.emp_no, e.first_name, e.last_name, 
-                       e.gender, e.hire_date, 
+                       e.gender, e.hire_date, de.dept_no, d.dept_name,
                        IF(dm.dept_no IS NULL,false,true) as is_manager
                 FROM employees AS e
                 LEFT JOIN dept_manager as dm ON e.emp_no = dm.emp_no
+                JOIN dept_emp AS de ON e.emp_no = de.emp_no
+                JOIN departments AS d ON de.dept_no = d.dept_no 
                 WHERE e.emp_no = ?;";
         $result = $this->db->query($sql, array($id));
         return $result->result();
@@ -89,7 +91,7 @@ class Employee_model extends CI_Model {
         }
         $sql = "SELECT SQL_CALC_FOUND_ROWS e.emp_no, e.first_name, e.last_name, e.gender,
                        t.title, e.hire_date, d.dept_name, t.from_date, 
-                       MAX(t.to_date) as to_date, d.dept_name
+                       MAX(t.to_date) as to_date
                 FROM dept_manager as dm
                 JOIN dept_emp as de ON dm.dept_no = de.dept_no
                 JOIN departments as d ON dm.dept_no = d.dept_no
@@ -120,5 +122,40 @@ class Employee_model extends CI_Model {
             'total' => $count->total,
             'start' => $startPage
         );
+    }
+
+    /**
+     * fetch the user details. user's details can only be seen by user in the same department
+     * Note: auth checking is not written into this query, user's from the same department can
+     *       read each other's details, including themselves.
+     * @param int $userId the user id
+     * @param int $deptNo the department this user belongs to
+     */
+    function getDetails($userId, $deptNo) {
+        if (!is_numeric($userId)) {
+            throw new InvalidArgumentException('Invalid argument, parameters needs to be a number.');
+        }
+       
+        $sql = "SELECT e.emp_no, e.first_name, e.last_name, e.gender,
+                       t.title, e.hire_date, d.dept_name, e.birth_date, t.from_date, 
+                       MAX(t.to_date) as to_date, d.dept_name, s.salary,
+                       TIMESTAMPDIFF(YEAR, e.birth_date, CURRENT_DATE()) AS age,
+                       TIMESTAMPDIFF(YEAR, e.hire_date, LEAST(t.to_date, CURRENT_DATE())) AS emp_year
+                FROM departments AS d
+                JOIN dept_emp as de ON d.dept_no = de.dept_no
+                JOIN employees as e ON de.emp_no = e.emp_no
+                JOIN titles as t ON e.emp_no = t.emp_no
+                JOIN salaries as s ON e.emp_no = s.emp_no AND s.to_date = t.to_date
+                WHERE e.emp_no = ? AND de.dept_no = ?
+                ORDER BY e.first_name;";
+
+        $query = $this->db->query($sql, array($userId, $deptNo));
+  
+        if ($query->num_rows() > 0) {
+           $row = $query->row();
+           return $row;
+        } else {
+            return false;
+        }
     }
 }
