@@ -7,16 +7,16 @@ class LibAuth {
 
     public function login($firstName, $lastName, $password) {
     	//check database for user authentication
-    	$this->CI->load->model('Employee_model');
+    	$this->CI->load->model('Employee');
         try {
-            $result = $this->CI->Employee_model->getUserAndType($password, $firstName, $lastName);
+            $result = $this->CI->Employee->getUserAndType($password, $firstName, $lastName);
             if (count($result)) {
                 $user = $result[0];
                 //this user exists, log him/her in
                 $this->CI->session->set_userdata('loggedIn', true);
                 $this->CI->session->set_userdata('firstName', $user->first_name);
                 $this->CI->session->set_userdata('lastName', $user->last_name);
-                $this->CI->session->set_userdata('userId', $user->emp_no);
+                $this->CI->session->set_userdata('userId', intval($user->emp_no));
                 $this->CI->session->set_userdata('isManager', $user->is_manager);
                 $this->CI->session->set_userdata('deptNo', $user->dept_no);
                 $this->CI->session->set_userdata('deptName', $user->dept_name);
@@ -37,7 +37,7 @@ class LibAuth {
     }
 
     public function logout() {
-    	session_destroy();
+    	$this->CI->session->sess_destroy();
     	return true;
     }
 
@@ -54,6 +54,11 @@ class LibAuth {
     }
 
     public function getUserName() {
-    	return $this->CI->session->userdata('firstName') . ' ' . $this->CI->session->userdata('lastName');
+        if ($this->hasLoggedIn()) {
+            return $this->CI->session->userdata('firstName') . ' ' . $this->CI->session->userdata('lastName');
+        } else {
+            return false;
+        }
+    	
     }
 }

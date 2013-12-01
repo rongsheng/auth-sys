@@ -36,13 +36,13 @@ class Employee extends CI_Controller {
                 //get the user's details. $departNo is used to check if this manager
                 //has permission to view employees under another department
                 $userId = intval($input['id']);
-                $result = $this->Employee_model->getDetails($userId, $departNo);
+                $result = $this->Employee->getDetails($userId, $departNo);
 
             } else {
                 //this user does not have permission to read others' details,
                 //always return his details.
                 $userId = $this->libauth->getUserId();
-                $result = $this->Employee_model->getDetails($userId, $departNo);
+                $result = $this->Employee->getDetails($userId, $departNo);
             }
             if ($result) {
                 $this->json->returnJSON(array(
@@ -90,7 +90,7 @@ class Employee extends CI_Controller {
             $size = isset($input['s']) ? (int)$input['s'] : $this->config->item('default_fetch_size');
             $column = isset($input['c']) ? $input['c'] : null;
             $keyword = isset($input['k']) ? $input['k'] : null;
-            $result = $this->Employee_model->getSubordinate($userId, $startPage, $size, $column, $keyword);
+            $result = $this->Employee->getSubordinate($userId, $startPage, $size, $column, $keyword);
 
             $this->json->returnJSON($result);
         } else {

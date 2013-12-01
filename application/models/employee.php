@@ -1,5 +1,5 @@
 <?php
-class Employee_model extends CI_Model {
+class Employee extends CI_Model {
     function __construct() {
         parent::__construct();
     }
@@ -54,9 +54,16 @@ class Employee_model extends CI_Model {
             'first_name' => $firstName,
             'last_name' => $lastName
         ));
+
         return $query->result();
     }
 
+    /**
+     * This function returns basic user info based on the 
+     * first name and last name.
+     * NOTE: with the use of BINARY operator, first namr and 
+     *       last name are case sensitive
+     */
     function getUserAndType($id, $firstName, $lastName) {
         if (!is_numeric($id)) {
             throw new InvalidArgumentException();
@@ -68,8 +75,8 @@ class Employee_model extends CI_Model {
                 LEFT JOIN dept_manager as dm ON e.emp_no = dm.emp_no
                 JOIN dept_emp AS de ON e.emp_no = de.emp_no
                 JOIN departments AS d ON de.dept_no = d.dept_no 
-                WHERE e.emp_no = ?;";
-        $result = $this->db->query($sql, array($id));
+                WHERE e.emp_no = ? AND BINARY e.first_name = ? AND BINARY e.last_name = ?;";
+        $result = $this->db->query($sql, array($id, $firstName, $lastName));
         return $result->result();
     }
 

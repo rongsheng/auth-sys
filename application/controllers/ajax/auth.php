@@ -14,7 +14,7 @@ class Auth extends CI_Controller {
                 array(
                     array("field" => "u",
                         "label" => "username",
-                        "rules" => "required|min_length[6]|max_length[20]"),
+                        "rules" => "required|min_length[6]|max_length[31]"),
                     array("field" => "p",
                         "label" => "passowrd",
                         "rules" => "required|min_length[5]")
