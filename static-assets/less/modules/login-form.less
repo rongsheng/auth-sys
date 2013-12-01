@@ -1,10 +1,17 @@
 body {
     background-color: #f0f0f0;
 }
+
+.error-wrapper {
+    text-align: center;
+    visibility: hidden;
+    height: 52px;
+}
+
 .login-form
 {
     position: relative;
-    padding: 45px 15px 15px;
+    padding: 45px 20px 5px 20px;
     margin: 0 -15px 15px;
     background-color: #ffffff;
     border-color: #e5e5e5 #eee #eee;
@@ -12,6 +19,12 @@ body {
     border-width: 1px 0;
     border-radius: 3px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+    .form-group {
+        .note {
+            text-align: center;
+            color: grey;
+        }
+    }
 }
  
 .login-form::after
@@ -31,7 +44,15 @@ body {
 @media (min-width: 768px) {
     .login-form {
         margin: 15px auto;
-        width: 30%;
-        padding: 45px 20px;
+        width: 450px;
+        max-width: 450px;
+        padding: 45px 20px 5px 20px;
+        text-align: right;
+        .form-horizontal {
+            .control-label {
+                margin-right: 20px;
+                min-width: 70px;
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 require_once (APPPATH . 'libraries/FormInput/FormInput.php');
 
-class Auth extends CI_Controller {
+class Auth_Service extends CI_Controller {
     public function __construct ( ) {
         parent::__construct();
         $this->load->library('masterpage');

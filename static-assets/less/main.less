@@ -25,3 +25,44 @@
 
 // Modules
 @import "./modules/user-details-modal.less";
+
+.inline {
+	display: inline-block;
+}
+
+#main-wrapper {
+	max-width: 1170px;
+	margin: 0 auto;
+}
+
+#control-panel {
+	.table-panel {
+		padding-left: 0;
+		margin: 20px 0;
+	}
+	.pagination-wrapper {
+		display: inline-block;
+		float: right;
+		padding-right: 0px;
+	}
+	.page-info {
+		margin: 20px 0 20px 15px;
+		padding: 8px;
+		text-align: right
+	}
+	.pagination {
+		float: right;
+	}
+}
+
+@media (max-width: 990px) {
+    .page-info { 
+    	display: none;
+    }
+}
+
+table {
+	tr:hover {
+		cursor: pointer;
+	}
+}

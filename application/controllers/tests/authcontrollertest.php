@@ -3,7 +3,7 @@
 require_once (APPPATH . 'libraries/FormInput/FormInput.php');
 require_once (APPPATH . 'controllers/ajax/auth.php');
 
-class AuthControllerTest extends Auth {
+class AuthControllerTest extends Auth_Service {
     public function __construct ( ) {
         parent::__construct();
         $this->load->library('unit_test');

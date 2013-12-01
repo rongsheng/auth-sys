@@ -35,25 +35,33 @@ define(['jquery',
                     success: this.fetchSuccess,
                     error: this.fetchFailed
                 });
+            } else {
+                this.showDetails(this.model.get('data'));
             }
         },
 
         fetchSuccess: function(model, response) {
             if (response && response.data) {
-                console.log(response);
                 //format the to_date from data
                 if (response.data.to_date == '9999-01-01') {
                     response.data.to_date = 'Today';
+                    this.model.set({
+                        to_date: 'Today'
+                    });
                 }
                 //render the user details modal
-                var template = this.compileUserDetails({
-                    data: response.data
-                });
-                $('#user-details-modal').html(template);
-                $('#user-details-modal').modal('show');
+                this.showDetails(response.data);
             } else {
                 //show error here
             }
+        },
+
+        showDetails: function(data) {
+            var template = this.compileUserDetails({
+                data: data
+            });
+            $('#user-details-modal').html(template);
+            $('#user-details-modal').modal('show');
         },
 
         fetchFailed: function() {

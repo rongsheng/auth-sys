@@ -81,15 +81,12 @@ define(['jquery',
         },
 
         refresh: function(start, total, size) {
-            $(this.el).find('#start-page').text(start + 1);
             var totalPage = 1;
             if (total % size == 0) {
                 totalPage = Math.floor(total / size);
             } else {
                 totalPage = Math.floor(total / size) + 1;
             }
-            $(this.el).find('#total-page').text(totalPage);
-
             this.renderPagination(start, totalPage);
         },
 

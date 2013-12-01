@@ -43,6 +43,9 @@ define(['jquery',
             });
 
             $(this.el).html(template);
+            
+            $(this.el).find('#start-page').text(index + 1);
+            $(this.el).find('#total-page').text(totalPage);
         }
     });
 

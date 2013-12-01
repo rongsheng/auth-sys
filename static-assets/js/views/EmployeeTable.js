@@ -54,7 +54,7 @@ define(['jquery',
 
         renderPanel: function() {
             this.epView = new EmployeePanelView({
-                el: '#control-panel',
+                el: '#table-panel',
                 allevents: this.allevents,
                 start: this.start,
                 size: this.size
@@ -71,8 +71,6 @@ define(['jquery',
             $table.find('#table-body').html('');
             //render table rows
             _.each(this.collection.models, function(employee) {
-
-                console.log(employee);
                 var eiView = new EmployeeItemView({
                     root: '#table-body'
                 });

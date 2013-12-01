@@ -2,13 +2,12 @@
 
 require_once (APPPATH . 'libraries/FormInput/FormInput.php');
 
-class Employee extends CI_Controller {
+class Employee_Service extends CI_Controller {
 	public function __construct ( ) {
         parent::__construct();
     }
 
     public function getDetails() {
-        session_start();
         if ($this->libauth->hasLoggedIn()) {
             //check if this user is a manager of a department
             $isManager = $this->session->userdata('isManager');
