@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2008, Kim Johansson
  *
  * @modified Sheldon Rong
- * @add: utilise template system for masterpage,
+ * @add: utilise smarty template system for masterpage,
  *       places being modified will be marked with @MODIFIED
  * @version 0.0.2
  */
@@ -49,7 +49,7 @@ class MasterPage {
      * @param mixed $content The content to be used in the view file.
      */
     public function addContentPage ( $file, $tag, $content = array ()) {
-        $this->contentPages[$tag] = $this->CI->parser->parse($file, $content, true); 
+        $this->contentPages[$tag] = $this->CI->parser->parse($file, $content, true); //@MODIFIED
     }
 
     /**
@@ -64,7 +64,6 @@ class MasterPage {
             $masterPage = str_replace ( '<mp:' . ucfirst ( strtolower ( $tag ) ) . ' />',
             $content, $masterPage );
         }
-
         // Finally, print the data.
         echo $masterPage;
     }

@@ -2,13 +2,17 @@
 
 require_once (APPPATH . 'libraries/FormInput/FormInput.php');
 
+/**
+ *  Auth_Service provides an api to the auth system.
+ *  This class atm only provides ajax endpoint to login.
+ */
 class Auth_Service extends CI_Controller {
-    public function __construct ( ) {
-        parent::__construct();
-        $this->load->library('masterpage');
-    }
 
+    /**
+     *  Login function that checks user's input and login for this user.
+     */
     public function login() {
+        //validate user's input
         try {
             $input = FormInput::getPostInput(
                 array(
@@ -30,7 +34,7 @@ class Auth_Service extends CI_Controller {
         }
 
         //check that login username contains character '.'(dot),
-        //if not, return false directly
+        //if not, return false directly.
         if (strpos($input['u'], '.') === false) {
             $this->json->returnJSON(array(
                 'status' => 'failed',
@@ -38,6 +42,7 @@ class Auth_Service extends CI_Controller {
             ));
             return false;
         } else {
+            //user's input validated, log the user in.
             $userName = explode('.', $input['u']);
             $firstName = $userName[0];
             $lastName = $userName[1];
@@ -58,3 +63,6 @@ class Auth_Service extends CI_Controller {
         }
     }
 }
+
+/* End of file auth_service.php */
+/* Location: ./application/controllers/ajax/auth_service.php */

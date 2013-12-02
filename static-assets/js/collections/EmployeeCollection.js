@@ -5,10 +5,7 @@ define(['jquery',
   function ($, _, Backbone, Employee) {
   	var EmployeeCollection = Backbone.Collection.extend({
   		  model: Employee,
-        url: '/api/employee_service/getSubordinate',
-    		check: function() {
-    			//@TODO
-    		}
+        url: '/api/employee_service/getSubordinate'
   	});
 
   	return EmployeeCollection;

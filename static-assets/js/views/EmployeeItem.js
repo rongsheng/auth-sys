@@ -1,16 +1,21 @@
 define(['jquery',
     'underscore',
     'backbone',
+    'bootstrap',
     'models/employee',
     'text!templates/employee-item.html',
-    'text!templates/user-details.html'],
-  function ($, _, Backbone, Employee,
-    EmployeeItemTemplate, UserDetailsTemplate) {
+    'text!templates/user-details.html',
+    'text!templates/error.html'],
+  function ($, _, Backbone, Bootstrap, Employee,
+    EmployeeItemTemplate, UserDetailsTemplate,
+    ErrorTemplate) {
+    'use strict'
     var EmployeeItemView = Backbone.View.extend({
         //template used to render the table row
         compile: _.template(EmployeeItemTemplate),
         //template used to render the user details modal
         compileUserDetails: _.template(UserDetailsTemplate),
+        compileError: _.template(ErrorTemplate),
         tagName: 'tr',
         emp_no: null,
 
@@ -26,6 +31,7 @@ define(['jquery',
         },
 
         fetch: function() {
+            this.clearError();
             if (_.isEmpty(this.model.toJSON())) {
                 this.model.fetch({
                     data: {
@@ -41,7 +47,7 @@ define(['jquery',
         },
 
         fetchSuccess: function(model, response) {
-            if (response && response.data) {
+            if (response && response.status == 'success') {
                 //format the to_date from data
                 if (response.data.to_date == '9999-01-01') {
                     response.data.to_date = 'Today';
@@ -52,8 +58,20 @@ define(['jquery',
                 //render the user details modal
                 this.showDetails(response.data);
             } else {
-                //show error here
+                this.showError('Failed to fetch user details');
             }
+        },
+
+        fetchFailed: function() {
+            this.showError('Failed to fetch user details, please refresh and try again.');
+        },
+
+        showError: function(message) {
+            $('#error-message').html(this.compileError({message:message}));
+        },
+
+        clearError: function() {
+            $('#error-message').html('');
         },
 
         showDetails: function(data) {
@@ -62,10 +80,6 @@ define(['jquery',
             });
             $('#user-details-modal').html(template);
             $('#user-details-modal').modal('show');
-        },
-
-        fetchFailed: function() {
-
         },
 
         render: function(model) {

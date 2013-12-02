@@ -1,15 +1,20 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-require_once (APPPATH . 'libraries/FormInput/FormInput.php');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller {
-    public function __construct ( ) {
-        parent::__construct();
-        $this->load->library('masterpage');
-    }
 
+    /**
+     *  Index Page for Login controller.
+     *  Login controller display the login (box) view
+     *  if users have not logged in or redirect them 
+     *  to the application directly.
+     */
     public function index() {
-        session_start();
+        //check if user has logged in, if true, redirect them to main
+        if ($this->libauth->hasLoggedIn()) {
+            header('Location: /main');
+        }
+
+        //output login view
         $this->masterpage->setMasterPage('master');
         $this->masterpage->addContentPage('login', 'content');
         $this->masterpage->show(array(

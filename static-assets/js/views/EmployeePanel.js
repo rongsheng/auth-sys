@@ -33,7 +33,6 @@ define(['jquery',
             } else {
                 return '#';
             }
-            
         },
 
         setSearchColumn: function(e) {

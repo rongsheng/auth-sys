@@ -9,6 +9,10 @@ define(['jquery',
             'focus #username-input, #password-input': 'clear'
         },
 
+        /**
+         * validate user's inputs in the loginbox
+         * @return {[type]}
+         */
         validateInputs: function() {
             var allGood = true;
             if (this.$username.val() == '' || this.$username.val().length > 31) {
@@ -31,6 +35,10 @@ define(['jquery',
             $(e.currentTarget).parents('.form-group').removeClass('has-error');
         },
 
+        /**
+         * send ajax request to log the user in
+         * @return {[type]}
+         */
         login: function() {
             if (!this.validateInputs()) {
                 return false;
@@ -58,7 +66,7 @@ define(['jquery',
                     }
                 },
                 error: function(resp) {
-                    
+                    this.showError('Failed to connect to user, please try again.', true);
                 }
             });
         },

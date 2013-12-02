@@ -1,9 +1,11 @@
 {nocache}
 <div class="welcome-wrapper alert alert-info">
 	<span>Welcome <strong>{$firstName} {$lastName}</strong></span>
-	<span class="pull-right">{$deptName} Department</span>
+	<a href="/logout" class="logout">Logout</a>
+	<span class="pull-right">Department of {$deptName}</span>
 </div>
 {/nocache}
+<div id="error-message"></div>
 <div id="main-wrapper">
 	<div id="employee-table-wrapper">
 		<div id="control-panel">

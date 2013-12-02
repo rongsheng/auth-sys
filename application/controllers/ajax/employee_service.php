@@ -2,11 +2,16 @@
 
 require_once (APPPATH . 'libraries/FormInput/FormInput.php');
 
+/**
+ *  Employee_Service provides an api to the fetch employees' info.
+ */
 class Employee_Service extends CI_Controller {
-	public function __construct ( ) {
-        parent::__construct();
-    }
 
+    /**
+     *  Get the detail information for a particular employee.
+     *  In order to view the details, the requester must be in
+     *  the same department as the user.
+     */
     public function getDetails() {
         if ($this->libauth->hasLoggedIn()) {
             //check if this user is a manager of a department
@@ -57,13 +62,26 @@ class Employee_Service extends CI_Controller {
                 return false;
             }
         } else {
-            var_dump('NOT LOGGED IN.!!');
+            //user has not logged in, redirect to login page.
+            header('Location: /login');
         }
     }
 
+    /**
+     *  Get the information of all subordinate staff for a particular manager.
+     *  In order to view the details, the requester must be a manager.
+     */
     public function getSubordinate() {
-        session_start();
         if ($this->libauth->hasLoggedIn()) {
+            //check this user is not a manager, return error
+            if (!$this->libauth->isManager()) {
+                $this->json->returnJSON(array(
+                    'status' => 'failed',
+                    'reason' => "You do not have the permission to view employees' details."
+                ));
+                return false;
+            }
+
             try {
                 $input = FormInput::getGetInput(
                     array(
@@ -83,20 +101,24 @@ class Employee_Service extends CI_Controller {
                 return false;
             }
 
-            //initialize parameters, if no input from user, set to default
             $userId = $this->libauth->getUserId();
+            //initialize parameters, if no input from user, set to default
             $startPage = isset($input['p']) ? (int)$input['p'] : $this->config->item('default_page_start');
             $size = isset($input['s']) ? (int)$input['s'] : $this->config->item('default_fetch_size');
             $column = isset($input['c']) ? $input['c'] : null;
             $keyword = isset($input['k']) ? $input['k'] : null;
             $result = $this->Employee->getSubordinate($userId, $startPage, $size, $column, $keyword);
 
-            $this->json->returnJSON($result);
+            $this->json->returnJSON(array(
+                'status' => 'success',
+                'data' => $result
+            ));
         } else {
-            var_dump('NOT LOGGED IN.!!');
+            //user has not logged in, redirect to login page.
+            header('Location: /login');
         }
     }
 }
 
-/* End of file login.php */
-/* Location: ./application/controllers/login.php */
+/* End of file employee_service.php */
+/* Location: ./application/controllers/ajax/employee_service.php */

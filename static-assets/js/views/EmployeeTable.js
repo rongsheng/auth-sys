@@ -5,12 +5,15 @@ define(['jquery',
     'views/EmployeePanel',
     'views/EmployeeItem',
     'text!templates/employee-table.html',
+    'text!templates/error.html'
     ],
   function ($, _, Backbone, EmployeeCollection,
-    EmployeePanelView, EmployeeItemView, EmployeeTableTemplate) {
+    EmployeePanelView, EmployeeItemView,
+    EmployeeTableTemplate, ErrorTemplate) {
     'use strict'
     var EmployeeTableView = Backbone.View.extend({
         compileTable: _.template(EmployeeTableTemplate),
+        compileError: _.template(ErrorTemplate),
         allevents: {},
         start: 0,
         size: 15,
@@ -24,6 +27,14 @@ define(['jquery',
             this.allevents.on('table:fetch', this.fetch);
         },
 
+        /**
+         * fetch data to get all subordinates,
+         * callbacks are fetchSuccess and fetchFailed
+         * @param  {int} page
+         * @param  {int} size
+         * @param  {string} keyword
+         * @param  {string} column
+         */
         fetch: function(page, size, keyword, column) {
             this.collection.fetch({
                 data: {
@@ -38,18 +49,40 @@ define(['jquery',
             });
         },
 
+        /**
+         * when success, save the data into collection
+         * and render table. send event to panel to refresh
+         * and update pagination infomation
+         * @param  {[type]} model
+         * @param  {[type]} response
+         * @return {[type]}
+         */
         fetchSuccess: function(model, response) {
-            this.total = response.total;
-            this.hit = response.hit;
-            this.start = response.start;
-            this.collection = new EmployeeCollection(response.data);
+            if (response && response.status == 'success') {
+                response = response.data;
 
-            this.renderTableContent();
-            this.allevents.trigger('panel:refresh', this.start, this.total, this.size);
+                this.total = response.total;
+                this.hit = response.hit;
+                this.start = response.start;
+                this.collection = new EmployeeCollection(response.data);
+
+                this.renderTableContent();
+                this.allevents.trigger('panel:refresh', this.start, this.total, this.size);
+            } else {
+                this.showError('Failed to fetch all subordinate staff.');
+            }
         },
 
-        fetchFailed: function(resp) {
+        fetchFailed: function() {
+            this.showError('Failed to fetch all subordinate staff, please refresh and try again.');
+        },
 
+        showError: function(message) {
+            $('#error-message').html(this.compileError({message:message}));
+        },
+
+        clearError: function() {
+            $('#error-message').html('');
         },
 
         renderPanel: function() {
@@ -62,6 +95,9 @@ define(['jquery',
             this.epView.render();
         },
 
+        /**
+         * render the table using collection data
+         */
         renderTableContent: function() {
             //render table header
             var $table = $(this.el).find('#employee-table');
@@ -78,6 +114,14 @@ define(['jquery',
             });
         },
 
+        /**
+         * render panel first and also fetch data from backend
+         * so we could render the table when data are ready
+         * @param  {[type]} id
+         * @param  {[type]} type
+         * @param  {[type]} keyword
+         * @return {[type]}
+         */
         render: function(id, type, keyword) {
             if (typeof id != 'undefined') {
                 this.start = id;

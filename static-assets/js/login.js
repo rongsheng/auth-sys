@@ -1,6 +1,8 @@
 define(['jquery',
     'views/Login'],
   function ($, LoginView) {
-  	var loginView = new LoginView();
-  	loginView.render();
+  	$(document).ready(function() {
+  		var loginView = new LoginView();
+  		loginView.render();
+  	});
 });
