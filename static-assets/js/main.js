@@ -1,4 +1,6 @@
 define(['jquery',
+    'manager',
+    'employee'
     'underscore',
     'backbone',
     'bootstrap',

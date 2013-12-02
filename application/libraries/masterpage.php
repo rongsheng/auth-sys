@@ -48,8 +48,8 @@ class MasterPage {
      * @param string $tag The tag in the MasterPage it should match.
      * @param mixed $content The content to be used in the view file.
      */
-    public function addContentPage ( $file, $tag, $content = array ( ) ) {
-        $this->contentPages[$tag] = $this->CI->load->view ( $file, $content, true );
+    public function addContentPage ( $file, $tag, $content = array ()) {
+        $this->contentPages[$tag] = $this->CI->parser->parse($file, $content, true); 
     }
 
     /**

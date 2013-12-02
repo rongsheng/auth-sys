@@ -49,6 +49,14 @@ class LibAuth {
 		}
     }
 
+    public function isManager() {
+        if ($this->CI->session->userdata('isManager') == '1') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getUserId() {
     	return $this->CI->session->userdata('userId');
     }
@@ -58,7 +66,23 @@ class LibAuth {
             return $this->CI->session->userdata('firstName') . ' ' . $this->CI->session->userdata('lastName');
         } else {
             return false;
-        }
-    	
+        }	
     }
+
+    public function getFirstName() {
+        return $this->CI->session->userdata('firstName');
+    }
+
+    public function getLastName() {
+        return $this->CI->session->userdata('lastName');
+    }
+
+    public function getDepartment() {
+        return $this->CI->session->userdata('deptName');
+    }
+
+    public function getDeptNo() {
+        return $this->CI->session->userdata('deptNo');
+    }
+
 }

@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Login</title>
-    <link rel="stylesheet/less" type="text/css" href="{static_less}">  
+    <title>Employee Management</title>
+    {nocache}
+    <link rel="stylesheet/less" type="text/css" href="{$static_less}">
+    {/nocache}
   </head>
   <body>
     <div id="container">
@@ -39,7 +41,9 @@
               }
           }
       });
-      requirejs(['{load_js}']);
+      {nocache}
+      requirejs(['{$load_js}']);
+      {/nocache}
     </script>
   </body>
 </html>

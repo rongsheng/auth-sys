@@ -27,19 +27,23 @@ class Main extends CI_Controller {
             header('Location: /login');
         }
 
-        $data = array({
-            'is_manager' => $this->session->userdata('isManager'),
-            'firstname' => $this->session->userdata('firstName'),
-            'lastname' => $this->session->userdata('lastName'),
-            'deptName' => $this->session->userdata('deptName')
-        });
+        $data = array(
+            'isManager' => $this->libauth->isManager(),
+            'firstName' => $this->libauth->getFirstName(),
+            'lastName' => $this->libauth->getLastName(),
+            'deptName' => $this->libauth->getDepartment(),
+            'userId' => $this->libauth->getUserId()
+        );
 
         $this->masterpage->setMasterPage('master');
-        $this->masterpage->addContentPage('main', 'content', $data);
+        $load_view = $load_js = 'employee';
+        if ($this->libauth->isManager()) {
+            $load_view = $load_js = 'manager';
+        }
+        $this->masterpage->addContentPage($load_view, 'content', $data);
         $this->masterpage->show(array(
-            'load_js' => '/static-assets/js/main',
-            'static_less' => '/static-assets/less/main.less',
-            'is_manager' => $this->session->userdata('is_manager')
+            'load_js' => '/static-assets/js/' . $load_js,
+            'static_less' => '/static-assets/less/main.less'
         ));
     }
 }

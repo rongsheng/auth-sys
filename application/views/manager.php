@@ -1,3 +1,9 @@
+{nocache}
+<div class="welcome-wrapper alert alert-info">
+	<span>Welcome <strong>{$firstName} {$lastName}</strong></span>
+	<span class="pull-right">{$deptName} Department</span>
+</div>
+{/nocache}
 <div id="main-wrapper">
 	<div id="employee-table-wrapper">
 		<div id="control-panel">
