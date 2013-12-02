@@ -56,8 +56,9 @@ class Employee extends CI_Model {
         if (!(is_numeric($managerId) && is_numeric($startPage) && is_numeric($size))) {
             throw new InvalidArgumentException('Invalid argument, parameters needs to be a number.');
         }
-
+        $this->db->trans_start();
         $data = EmployeeDAO::getSubordinate($this->db, $managerId, $startPage, $size, $column, $keyword);
+        $this->db->trans_complete();
         return $data;
     }
 

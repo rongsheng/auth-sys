@@ -157,6 +157,11 @@ class LibAuthTest extends CI_Controller {
         $result = $this->libauth->login('maRenN', 'VeEraRAghAvAN', 102245);
         $this->unit->run($result, false, 'LibAuth: negative login test');
         $this->session->sess_destroy();
+
+        //Test Retired Users
+        $result = $this->libauth->login('Saniya', 'Kalloufi', 10008);
+        $this->unit->run($result, false, 'LibAuth: retired employee test');
+        $this->session->sess_destroy();
     }
 
     /**

@@ -19,7 +19,8 @@ class EmployeeDAO {
     }
 
     /**
-     * get user and type from db
+     * get user and type from db. 
+     * NOTE: retired users do not grant the access to their info.
      * @param integer $id the employee number
      * @param string $firstName
      * @param string $lastName
@@ -30,7 +31,7 @@ class EmployeeDAO {
                        IF(dm.dept_no IS NULL,false,true) as is_manager
                 FROM employees AS e
                 LEFT JOIN dept_manager as dm ON e.emp_no = dm.emp_no
-                JOIN dept_emp AS de ON e.emp_no = de.emp_no
+                JOIN dept_emp AS de ON e.emp_no = de.emp_no AND de.to_date = '9999-01-01'
                 JOIN departments AS d ON de.dept_no = d.dept_no 
                 WHERE e.emp_no = ? AND BINARY e.first_name = ? AND BINARY e.last_name = ?;";
         $result = $db->query($sql, 
@@ -50,7 +51,6 @@ class EmployeeDAO {
      * @return array of data
      */
     public static function getSubordinate($db, $managerId, $startPage, $size, $column, $keyword) {
-    	$db->trans_start();
         $searchMode = null;
         if (!$column && $keyword) {
             $searchMode = 'full-text';
@@ -64,7 +64,7 @@ class EmployeeDAO {
                 JOIN dept_emp as de ON dm.dept_no = de.dept_no
                 JOIN departments as d ON dm.dept_no = d.dept_no
                 JOIN employees as e ON de.emp_no = e.emp_no
-                JOIN titles as t ON e.emp_no = t.emp_no 
+                JOIN titles as t ON e.emp_no = t.emp_no AND t.to_date = de.to_date
                 WHERE dm.emp_no = ? " .
                 ($searchMode == 'column' ? "AND {$column} LIKE '%{$keyword}%' " : " ") .
                 "GROUP BY e.emp_no
@@ -83,7 +83,6 @@ class EmployeeDAO {
         
         $calc = "SELECT FOUND_ROWS() AS total;";
         $count = $db->query($calc)->row();
-        $db->trans_complete();
 
         return array(
             'data' => $result->result(),
