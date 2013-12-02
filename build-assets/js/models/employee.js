@@ -1,1 +1,1 @@
-define(["jquery"],function(e){var t=Backbone.Model.extend({url:"/api/employee_service/getDetails"});return t});
+define(["jquery","underscore","backbone"],function(e,t,n){var r=Backbone.Model.extend({url:"/api/employee_service/getDetails"});return r});
