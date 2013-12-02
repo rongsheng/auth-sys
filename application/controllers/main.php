@@ -28,8 +28,11 @@ class Main extends CI_Controller {
         }
         $this->masterpage->addContentPage($load_view, 'content', $data);
         $this->masterpage->show(array(
-            'load_js' => '/static-assets/js/' . $load_js,
-            'static_less' => '/static-assets/less/main.less'
+            'static_js' => '/static-assets/js/' . $load_js,
+            'build_js' => '/build-assets/js/' . $load_js,
+            'less' => '/static-assets/less/main.less',
+            'css' => '/build-assets/css/main.css',
+            'ENVIRONMENT' => ENVIRONMENT
         ));
     }
 }

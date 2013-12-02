@@ -1,7 +1,5 @@
-define(['jquery',
-    'underscore',
-    'backbone'],
-  function ($, _, Backbone) {
+define(['jquery'],
+  function ($) {
   	var Employee = Backbone.Model.extend({
   		url: '/api/employee_service/getDetails',
   	});

@@ -15,13 +15,14 @@ class LibAuth {
 	}
 
     /**
-     * log in a user
+     * log in a user,
+     * NOTE: retired or dismissed user will not be able to log in
      * @param  string $firstName
      * @param  string $lastName
      * @param  integer $password
      * @return boolean
      */
-    public function login($firstName, $lastName, $password) {
+    public function login($firstName, $lastName, $password, &$notice = null) {
     	//load employee model to connect to database and fetch data
     	$this->CI->load->model('Employee');
         try {
@@ -29,6 +30,14 @@ class LibAuth {
             //if rows are found, then this user exists thus we record session data
             if (count($result)) {
                 $user = $result[0];
+
+                //check the service to_date, if it is a past time, that means, this user
+                //is no longer serving the company, show a friendly warning
+                if ($user->to_date != '9999-01-01') {
+                    $notice = 'Your login access privilege has ended since '. $user->to_date;
+                    return false;
+                }
+
                 //this user exists, log him/her in
                 $this->CI->session->set_userdata('loggedIn', true);
                 $this->CI->session->set_userdata('firstName', $user->first_name);

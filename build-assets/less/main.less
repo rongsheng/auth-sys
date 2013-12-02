@@ -1,0 +1,88 @@
+/**
+ * Login View Stylesheet
+ */
+
+// Bootstrap Cores
+@import "./bootstrap/variables.less";
+@import "./bootstrap/mixins.less";
+@import "./bootstrap/normalize.less";
+@import "./bootstrap/print.less";
+@import "./bootstrap/scaffolding.less";
+@import "./bootstrap/type.less";
+@import "./bootstrap/code.less";
+@import "./bootstrap/grid.less";
+@import "./bootstrap/tables.less";
+@import "./bootstrap/forms.less";
+@import "./bootstrap/buttons.less";
+@import "./bootstrap/pagination.less";
+@import "./bootstrap/panels.less";
+@import "./bootstrap/glyphicons.less";
+@import "./bootstrap/dropdowns.less";
+@import "./bootstrap/utilities.less";
+@import "./bootstrap/modals.less";
+@import "./bootstrap/alerts.less";
+@import "./bootstrap/input-groups.less";
+@import "./bootstrap/responsive-utilities.less";
+
+// Modules
+@import "./modules/user-details-modal.less";
+@import "./modules/welcome-wrapper.less";
+
+.inline {
+	display: inline-block;
+}
+
+.error-wrapper {
+    text-align: center;
+    position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+#main-wrapper {
+	max-width: 1170px;
+	margin: 0 auto;
+}
+
+#control-panel {
+	.table-panel {
+		padding-left: 0;
+		margin: 20px 0;
+	}
+	.pagination-wrapper {
+		display: inline-block;
+		float: right;
+		padding-right: 0px;
+	}
+	.page-info {
+		margin: 20px 0 20px 15px;
+		padding: 8px;
+		text-align: right
+	}
+	.pagination {
+		cursor: pointer;
+		float: right;
+	}
+
+	.dropdown-menu {
+		cursor: pointer;
+	}
+}
+
+@media (max-width: 990px) {
+    .page-info { 
+    	display: none;
+    }
+}
+
+table {
+	tr:hover {
+		cursor: pointer;
+	}
+	td.empty-row {
+		height: 38px;
+		text-align: center;
+		background: #f9f9f9;
+		color: grey;
+	}
+}

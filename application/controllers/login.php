@@ -18,8 +18,11 @@ class Login extends CI_Controller {
         $this->masterpage->setMasterPage('master');
         $this->masterpage->addContentPage('login', 'content');
         $this->masterpage->show(array(
-            'load_js' => '/static-assets/js/login',
-            'static_less' => '/static-assets/less/login.less'
+            'static_js' => '/static-assets/js/login',
+            'build_js' => '/build-assets/js/login',
+            'less' => '/static-assets/less/login.less',
+            'css' => '/build-assets/css/login.css',
+            'ENVIRONMENT' => ENVIRONMENT
         ));
     }
 }

@@ -1,10 +1,27 @@
+ requirejs.config({
+      baseUrl: '/static-assets/js',
+      paths: {
+          jquery: 'utils/jquery',
+          underscore: 'utils/underscore',
+          backbone: 'utils/backbone',
+          bootstrap: 'utils/bootstrap',
+          text: 'utils/text'
+      },
+      shim: {
+          'jquery': { exports: '$' },
+          'underscore': { deps: ['jquery'], exports: '_' },
+          'backbone': { deps: ['underscore', 'jquery'], exports: 'backbone' },
+          'bootstrap': { deps: ['jquery'], exports: 'bs' }
+      }
+});
 (function() {
 define(['jquery',
     'underscore',
     'backbone',
-    'views/EmployeeTable'],
-  function ($, _, Backbone,
-    EmployeeTableView) {
+    'views/EmployeeTable',
+    'views/UserDetails'],
+  function ($, underscore, backbone,
+    EmployeeTableView, UserDetailsView) {
     'use strict';
 
     $(document).ready(function() {
@@ -47,6 +64,19 @@ define(['jquery',
 
         var appRouter = new AppRouter();
         Backbone.history.start();
+
+        //special treatment to profile me
+        $('.profile-me').click(function() {
+            var udView = new UserDetailsView({
+                el: '#user-details-modal',
+                id: user_id,
+                hideControl: false
+            });
+
+            //and show it on page
+            udView.render();
+            $('#user-details-modal').modal().modal('show');
+        })
     });
   });
 })();

@@ -3,7 +3,9 @@
 	<span>Welcome <strong>{$firstName} {$lastName}</strong></span>
 	<a href="/logout" class="logout">Logout</a>
 	<span class="pull-right">Department of {$deptName}</span>
+	<span class="profile-me"><img class="img-circle" src="/images/photo.png" alt="User Pic">My Info</span>
 </div>
+<script>var user_id = '{$userId}'</script>
 {/nocache}
 <div id="error-message"></div>
 <div id="main-wrapper">

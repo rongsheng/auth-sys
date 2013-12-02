@@ -1,7 +1,7 @@
 define(['jquery',
     'underscore',
     'backbone'],
-  function ($, _, Backbone) {
+  function ($) {
     var LoginView = Backbone.View.extend({
         el: '#login-form',
         events: {

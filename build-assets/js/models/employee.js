@@ -1,0 +1,1 @@
+define(["jquery"],function(e){var t=Backbone.Model.extend({url:"/api/employee_service/getDetails"});return t});

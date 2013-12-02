@@ -7,7 +7,7 @@ define(['jquery',
     'text!templates/employee-table.html',
     'text!templates/error.html'
     ],
-  function ($, _, Backbone, EmployeeCollection,
+  function ($, underscore, backbone, EmployeeCollection,
     EmployeePanelView, EmployeeItemView,
     EmployeeTableTemplate, ErrorTemplate) {
     'use strict'
@@ -106,12 +106,20 @@ define(['jquery',
             //clear content
             $table.find('#table-body').html('');
             //render table rows
-            _.each(this.collection.models, function(employee) {
+            if (_.size(this.collection.models)) {
+                _.each(this.collection.models, function(employee) {
+                    var eiView = new EmployeeItemView({
+                        root: '#table-body'
+                    });
+                    eiView.render(employee);
+                });
+            } else {
                 var eiView = new EmployeeItemView({
                     root: '#table-body'
                 });
-                eiView.render(employee);
-            });
+                eiView.renderEmptyRow();
+            }
+            
         },
 
         /**

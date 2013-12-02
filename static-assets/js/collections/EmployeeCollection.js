@@ -2,7 +2,7 @@ define(['jquery',
     'underscore',
     'backbone',
     'models/employee'],
-  function ($, _, Backbone, Employee) {
+  function ($, underscore, backbone, Employee) {
   	var EmployeeCollection = Backbone.Collection.extend({
   		  model: Employee,
         url: '/api/employee_service/getSubordinate'

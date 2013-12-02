@@ -2,7 +2,7 @@ define(['jquery',
     'underscore',
     'backbone',
     'text!templates/employee-pagination.html'],
-  function ($, _, Backbone, EmployeePaginationTemplate) {
+  function ($, underscore, backbone, EmployeePaginationTemplate) {
     var EmployeePaginationView = Backbone.View.extend({
         compilePagination: _.template(EmployeePaginationTemplate),
         el: '#pagination-wrapper',

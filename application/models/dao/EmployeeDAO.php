@@ -19,19 +19,20 @@ class EmployeeDAO {
     }
 
     /**
-     * get user and type from db. 
-     * NOTE: retired users do not grant the access to their info.
+     * get user and type from db.
+     * checking dismissed employee was not done in sql layer
+     * as we wanted to show them some friendly notice.
      * @param integer $id the employee number
      * @param string $firstName
      * @param string $lastName
      */
     public static function getUserAndType($db, $id, $firstName, $lastName) {
     	$sql = "SELECT e.emp_no, e.first_name, e.last_name, 
-                       e.gender, e.hire_date, de.dept_no, d.dept_name,
+                       e.gender, e.hire_date, de.dept_no, d.dept_name, de.to_date,
                        IF(dm.dept_no IS NULL,false,true) as is_manager
                 FROM employees AS e
                 LEFT JOIN dept_manager as dm ON e.emp_no = dm.emp_no
-                JOIN dept_emp AS de ON e.emp_no = de.emp_no AND de.to_date = '9999-01-01'
+                JOIN dept_emp AS de ON e.emp_no = de.emp_no
                 JOIN departments AS d ON de.dept_no = d.dept_no 
                 WHERE e.emp_no = ? AND BINARY e.first_name = ? AND BINARY e.last_name = ?;";
         $result = $db->query($sql, 
@@ -52,8 +53,8 @@ class EmployeeDAO {
      */
     public static function getSubordinate($db, $managerId, $startPage, $size, $column, $keyword) {
         $searchMode = null;
-        if (!$column && $keyword) {
-            $searchMode = 'full-text';
+        if ($column == 'all' && $keyword) {
+            $searchMode = 'all';
         } else if ($column && $keyword) {
             $searchMode = 'column';
         }
@@ -66,7 +67,10 @@ class EmployeeDAO {
                 JOIN employees as e ON de.emp_no = e.emp_no
                 JOIN titles as t ON e.emp_no = t.emp_no AND t.to_date = de.to_date
                 WHERE dm.emp_no = ? " .
-                ($searchMode == 'column' ? "AND {$column} LIKE '%{$keyword}%' " : " ") .
+                ($searchMode == 'column' ? "AND {$column} LIKE '%{$keyword}%' " :
+                ($searchMode == 'all' ? "AND (e.first_name LIKE '%{$keyword}%' OR
+                        e.last_name LIKE '%{$keyword}%' OR e.gender LIKE '%{$keyword}%' OR
+                        t.title LIKE '%{$keyword}%' OR e.hire_date LIKE '%{$keyword}%') " : " ")) .
                 "GROUP BY e.emp_no
                 ORDER BY e.first_name
                 LIMIT ? , ?;";
@@ -75,7 +79,7 @@ class EmployeeDAO {
             $column = $db->escape_like_str($column);
             $keyword = $db->escape_like_str($keyword);
             $result = $db->query($sql, array($managerId, $startPage * $size, $size));
-        } if ($searchMode == 'full-text') {
+        } if ($searchMode == 'all') {
             $result = $db->query($sql, array($managerId, $startPage * $size, $size));
         } else {
             $result = $db->query($sql, array($managerId, $startPage * $size, $size));

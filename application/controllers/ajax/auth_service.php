@@ -47,8 +47,8 @@ class Auth_Service extends CI_Controller {
             $firstName = $userName[0];
             $lastName = $userName[1];
             $password = $input['p'];
-
-            if ($this->libauth->login($firstName, $lastName, $password)) {
+            $notice = null;
+            if ($this->libauth->login($firstName, $lastName, $password, $notice)) {
                 $this->json->returnJSON(array(
                     'status' => 'success'
                 ));
@@ -56,7 +56,7 @@ class Auth_Service extends CI_Controller {
             } else {
                 $this->json->returnJSON(array(
                     'status' => 'failed',
-                    'reason' => 'Invalid username or password'
+                    'reason' => $notice ? $notice : 'Invalid username or password'
                 ));
                 return false;
             }

@@ -6,7 +6,7 @@ define(['jquery',
     'text!templates/employee-item.html',
     'text!templates/user-details.html',
     'text!templates/error.html'],
-  function ($, _, Backbone, Bootstrap, Employee,
+  function ($, underscore, backbone, bs, Employee,
     EmployeeItemTemplate, UserDetailsTemplate,
     ErrorTemplate) {
     'use strict'
@@ -80,6 +80,12 @@ define(['jquery',
             });
             $('#user-details-modal').html(template);
             $('#user-details-modal').modal('show');
+        },
+
+        renderEmptyRow: function() {
+            $(this.root).append("<td class='empty-row' colspan='5'>" +
+                "Hmm, we can't find the person you've been looking for.</td>");
+            return true;
         },
 
         render: function(model) {

@@ -4,7 +4,7 @@ define(['jquery',
     'views/EmployeePagination',
     'text!templates/employee-panel.html'
     ],
-  function ($, _, Backbone, EmployeePaginationView,
+  function ($, underscore, backbone, EmployeePaginationView,
     EmployeePanelTemplate) {
     'use strict'
     var EmployeePanelView = Backbone.View.extend({
@@ -12,8 +12,9 @@ define(['jquery',
         start: 0,
         size: 15,
         searchColumn: null,
-        tmpColumn: null,
+        tmpColumn: 'all',
         events: {
+            'click #filter-clear': 'clear',
             'click .filter-column': 'setSearchColumn',
             'keyup #search-input' : 'search'
         },
@@ -25,6 +26,24 @@ define(['jquery',
             this.keyword = null;
             this.allevents = options.allevents;
             this.allevents.on('panel:refresh', this.refresh);
+        },
+
+        /**
+         * clear the search options, including search type and
+         * keyword, then call the default router
+         * @return {null}
+         */
+        clear: function() {
+            $(this.el).find('#search-label').text('Any');
+            $(this.el).find('#search-input').val('');
+            
+            this.searchColumn = null,
+            this.tmpColumn = 'all';
+            this.start = 0;
+            this.keyword = null,
+            Backbone.history.navigate(
+                this.getUrlBase(this.searchColumn, this.keyword) + (this.start + 1),
+            true);
         },
 
         getUrlBase: function(column, keyword) {
@@ -41,6 +60,7 @@ define(['jquery',
                until user hit enter for search */
             this.tmpColumn = $target.data('column');
             $(this.el).find('#search-label').text($target.text());
+            $(this.el).find('#search-input').focus();
         },
 
         search: function(e) {

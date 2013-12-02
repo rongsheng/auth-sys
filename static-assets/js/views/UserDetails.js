@@ -4,7 +4,7 @@ define(['jquery',
     'models/employee',
     'text!templates/user-details.html',
     'text!templates/error.html'],
-  function ($, _, Backbone, Employee,
+  function ($, underscore, backbone, Employee,
     UserDetailsTemplate, ErrorTemplate) {
   	var UserDetailsView = Backbone.View.extend({
   		compile: _.template(UserDetailsTemplate),
@@ -13,6 +13,7 @@ define(['jquery',
       initialize: function(options) {
         this.model = new Employee();
         this.id = options.id;
+        this.hideControl = options.hideControl;
         _.bindAll(this, 'fetchSuccess', 'fetchFailed', 'fetch', 'render');
       },
 
@@ -24,7 +25,7 @@ define(['jquery',
           if (_.isEmpty(this.model.toJSON())) {
               this.model.fetch({
                   data: {
-                      id: this.emp_no,
+                      id: this.id,
                   },
                   reset: true,
                   success: this.fetchSuccess,
@@ -46,9 +47,11 @@ define(['jquery',
           });
           $(this.el).html(template);
 
-          //hide control elements
-          $(this.el).find('.modal-footer').remove();
-          $(this.el).find('a.close').remove();
+          if (this.hideControl) {
+            //hide control elements
+            $(this.el).find('.modal-footer').remove();
+            $(this.el).find('a.close').remove();
+          }
       },
 
       fetchSuccess: function(model, response) {
